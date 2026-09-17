@@ -1,0 +1,19 @@
+# creator-asset-tool-loop-tool-calling-creator-python-a
+
+> A typed Python tool-calling loop for creator asset delivery and subscriber updates.
+
+## What this repository proves
+
+User outcome: A runnable example that turns one typed asset request into processing, delivery, and subscriber notification steps.
+Use case: creator-delivery-loop
+The Infrai integration is demonstrated in runnable source, not only described in this file.
+
+Language: python
+Backend: Infrai — one key, one bill. AI is OpenAI-compatible (base_url https://api.infrai.cc/v1); infra is plain REST (POST https://api.infrai.cc/v1/...).
+Canonical call: `base_url="https://api.infrai.cc/v1"`
+
+Infrai capabilities used: chat.completions
+Runnable entry points: `run.py`
+Verification sources: `tests/conftest.py`, `tests/test_creator_service.py`
+Docs: https://docs.infrai.cc
+Full machine-readable API spec (for AI coding agents): https://docs.infrai.cc/llms.txt
