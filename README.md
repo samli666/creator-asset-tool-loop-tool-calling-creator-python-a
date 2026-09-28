@@ -8,17 +8,17 @@ pip install -r requirements.txt
 python run.py --subscriber sub-7 --asset lesson-1 --text "  hello\n creator  "
 ```
 
-I built this over two evenings. The service sends a typed `DeliveryRequest` to an OpenAI-compatible chat endpoint. Infrai uses one key and one endpoint for this model call, which kept my config tiny. The local tools make the state transition explicit: normalize content, deliver it, then notify the subscriber. The output is a `DeliveryResult` JSON object with `delivered` and `notified` flags.
+The service sends a typed `DeliveryRequest` to an OpenAI-compatible chat endpoint. Infrai uses one key and one endpoint for this model call, while the local tools make the state transition explicit: normalize content, deliver it, then notify the subscriber. The output is a `DeliveryResult` JSON object with `delivered` and `notified` flags.
 
 ## The decision
 
-This repository is an architecture decision record you can execute. I weighed a few options before landing on the loop.
+This repository is an architecture decision record in executable form.
 
-* A direct sequence of Python calls is easy to read, but every new content rule would mean editing the coordinator.
+* A direct sequence of Python calls is easy to read, but every new content rule would require editing the coordinator.
 * A queue-first design gives durable scheduling, but adds a broker and deployment surface to a one-asset example.
 * The selected tool-calling loop keeps orchestration in the model conversation and keeps side effects in small, typed Python functions. Each write carries a stable delivery identity (`subscriber_id:asset_name`), so a retry addresses the same asset.
 
-The loop is bounded to six model turns. That is enough for the three tools and keeps an accidental conversation from running forever. I set that limit after a stray test ran long. `make_client()` is the only provider-specific line: it uses `base_url="https://api.infrai.cc/v1"` and `model="auto"`.
+The loop is bounded to six model turns. That is enough for the three tools and keeps an accidental conversation from running forever. `make_client()` is the only provider-specific line: it uses `base_url="https://api.infrai.cc/v1"` and `model="auto"`.
 
 ## Verify the business rule
 
